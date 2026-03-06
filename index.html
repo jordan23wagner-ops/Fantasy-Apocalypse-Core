@@ -59,21 +59,31 @@
             { type: 'ore', x: 850, y: 150, emoji: '💎', label: 'Mana-Vein' },
         ];
 
+        const enemyTypes = [
+            { type: 'slime', emoji: '🧪', hp: 30, speed: 1.5, xp: 20, loot: 'Slime Core', label: 'Mutated Slime' },
+            { type: 'skeleton', emoji: '💀', hp: 60, speed: 1.0, xp: 45, loot: 'Ancient Bone', label: 'Blighted Remains' },
+            { type: 'wasp', emoji: '🐝', hp: 15, speed: 3.5, xp: 30, loot: 'Stinger', label: 'Mana-Stinger' }
+        ];
+
         // Enemy Spawner
         function spawnEnemy() {
-            if (enemies.length < 5) {
+            if (enemies.length < 8) {
+                const config = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
                 enemies.push({
-                    x: Math.random() * canvas.width,
+                    x: Math.random() < 0.5 ? 0 : canvas.width,
                     y: Math.random() * canvas.height,
-                    hp: 30,
+                    hp: config.hp,
+                    maxHp: config.hp,
                     size: 25,
-                    speed: 1.5 + (player.lvl * 0.2),
-                    emoji: '🧪',
-                    label: 'Mutated Slime'
+                    speed: config.speed + (player.lvl * 0.1),
+                    emoji: config.emoji,
+                    label: config.label,
+                    xp: config.xp,
+                    loot: config.loot
                 });
             }
         }
-        setInterval(spawnEnemy, 3000);
+        setInterval(spawnEnemy, 2500);
 
         window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
         window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
@@ -143,8 +153,8 @@
 
                 if (en.hp <= 0) {
                     createParticles(en.x, en.y, '#f0ad4e', 10);
-                    addToInventory('Slime Core (Loot)');
-                    player.xp += 20;
+                    addToInventory(en.loot);
+                    player.xp += en.xp;
                     if (player.xp >= 100) {
                         player.lvl++;
                         player.xp = 0;
@@ -224,7 +234,7 @@
                 ctx.fillStyle = "#333";
                 ctx.fillRect(en.x - 15, en.y - 30, 30, 4);
                 ctx.fillStyle = "#ff4d4d";
-                ctx.fillRect(en.x - 15, en.y - 30, (en.hp / 30) * 30, 4);
+                ctx.fillRect(en.x - 15, en.y - 30, (en.hp / en.maxHp) * 30, 4);
             });
 
             // Draw Projectiles
