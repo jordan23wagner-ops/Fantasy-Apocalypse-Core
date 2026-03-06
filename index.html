@@ -62,13 +62,22 @@
         const enemyTypes = [
             { type: 'slime', emoji: '🧪', hp: 30, speed: 1.5, xp: 20, loot: 'Slime Core', label: 'Mutated Slime' },
             { type: 'skeleton', emoji: '💀', hp: 60, speed: 1.0, xp: 45, loot: 'Ancient Bone', label: 'Blighted Remains' },
-            { type: 'wasp', emoji: '🐝', hp: 15, speed: 3.5, xp: 30, loot: 'Stinger', label: 'Mana-Stinger' }
+            { type: 'wasp', emoji: '🐝', hp: 15, speed: 3.5, xp: 30, loot: 'Stinger', label: 'Mana-Stinger' },
+            { type: 'hound', emoji: '🐕', hp: 40, speed: 2.5, xp: 35, loot: 'Scavenged Leather', label: 'Scavenger Hound' },
+            { type: 'wraith', emoji: '👻', hp: 100, speed: 0.8, xp: 150, loot: 'Void Essence', label: 'Void Wraith' },
+            { type: 'golem', emoji: '🗿', hp: 250, speed: 0.5, xp: 500, loot: 'Mana-Crystal', label: 'Cursed Golem (ELITE)' }
         ];
 
         // Enemy Spawner
         function spawnEnemy() {
-            if (enemies.length < 8) {
-                const config = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+            if (enemies.length < 12) {
+                const rand = Math.random();
+                let config;
+                
+                // Rarity Logic: Golems and Wraiths are rarer
+                if (rand < 0.05) config = enemyTypes[5]; // Golem (5%)
+                else if (rand < 0.15) config = enemyTypes[4]; // Wraith (10%)
+                else config = enemyTypes[Math.floor(Math.random() * 4)]; // Others
                 enemies.push({
                     x: Math.random() < 0.5 ? 0 : canvas.width,
                     y: Math.random() * canvas.height,
