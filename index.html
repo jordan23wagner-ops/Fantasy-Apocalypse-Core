@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Apocalypse - Town Prototype</title>
+    <style>
+        body { margin: 0; background: #1a1a1a; color: #eee; font-family: 'Courier New', Courier, monospace; overflow: hidden; }
+        canvas { display: block; background: #222; border: 2px solid #444; margin: 20px auto; image-rendering: pixelated; }
+        #ui { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; }
+        .stat { color: #f0ad4e; }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <div>Project: Fantasy Apocalypse v0.0.1</div>
+        <div>WASD to Move | Near object + Space to interact</div>
+        <div id="player-stats">
+            Level: <span id="lvl" class="stat">1</span> | 
+            Wood: <span id="wood" class="stat">0</span> | 
+            Ore: <span id="ore" class="stat">0</span>
+        </div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 800;
+        canvas.height = 600;
+
+        const player = { x: 400, y: 300, size: 20, speed: 4, wood: 0, ore: 0 };
+        const keys = {};
+
+        // Fantasy Apocalypse World Objects
+        const worldObjects = [
+            { type: 'tree', x: 100, y: 100, color: '#2d5a27', label: 'Mana-Blasted Oak' },
+            { type: 'ore', x: 600, y: 400, color: '#555', label: 'Iron-Vein' },
+            { type: 'town', x: 400, y: 50, color: '#a52a2a', label: 'Home Base' }
+        ];
+
+        window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+        window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+        function update() {
+            if (keys['w']) player.y -= player.speed;
+            if (keys['s']) player.y += player.speed;
+            if (keys['a']) player.x -= player.speed;
+            if (keys['d']) player.x += player.speed;
+
+            // Simple collision/interaction logic
+            if (keys[' ']) {
+                worldObjects.forEach(obj => {
+                    const dist = Math.hypot(player.x - obj.x, player.y - obj.y);
+                    if (dist < 40) {
+                        if (obj.type === 'tree') { player.wood++; console.log("Harvested Wood"); }
+                        if (obj.type === 'ore') { player.ore++; console.log("Mined Ore"); }
+                        updateUI();
+                        keys[' '] = false; // Debounce
+                    }
+                });
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('wood').innerText = player.wood;
+            document.getElementById('ore').innerText = player.ore;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw objects
+            worldObjects.forEach(obj => {
+                ctx.fillStyle = obj.color;
+                ctx.fillRect(obj.x - 15, obj.y - 15, 30, 30);
+                ctx.fillStyle = "#fff";
+                ctx.font = "12px Arial";
+                ctx.fillText(obj.label, obj.x - 30, obj.y - 20);
+            });
+
+            // Draw Player
+            ctx.fillStyle = '#007bff';
+            ctx.fillRect(player.x - 10, player.y - 10, 20, 20);
+            ctx.strokeStyle = '#fff';
+            ctx.strokeRect(player.x - 10, player.y - 10, 20, 20);
+
+            requestAnimationFrame(() => {
+                update();
+                draw();
+            });
+        }
+
+        draw();
+    </script>
+</body>
+</html>
