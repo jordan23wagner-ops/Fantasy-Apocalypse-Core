@@ -1,20 +1,24 @@
-# Core Game Mechanics - Skill Logic
+# Core Game Mechanics - Economy & Magic
 
-## The "Non-Combat" Combat Loop
-Jordan's first request for skills: **Fishing, Woodcutting, Mining, and Smithing.**
+## The Mana Gem Economy (Currency: 💎)
+Mana Gems are the lifeblood of the Wasteland. Jordan's new economic logic:
 
-### Logic Hole Check:
-*   **The Conflict:** In a *Diablo* hack-n-slash, these skills are usually "secondary" or absent. If we include them as core skills, they must feed into the combat loop or the "Fallout" exploration loop to be meaningful.
-*   **The Fix (Mana-Blight Integration):** 
-    *   **Mining:** Extracting "Corrupted Ore" from mana-blasted veins.
-    *   **Woodcutting:** Harvesting "Iron-Bark" from mutated forests.
-    *   **Smithing:** Purifying these materials to create gear with "Diablo" style stats (e.g., +15% Fire Damage).
-    *   **Fishing:** Harvesting mutated aquatic life for "Potions" or temporary survival buffs.
+### Sources:
+- **Combat:** Monsters drop gems on death (e.g., Slime: 2-5, Golem: 50+).
+- **Gathering:** Mining/Woodcutting has a 10% chance to yield a gem.
+- **Trade:** Selling gathered loot to the Town Hub Merchant.
 
-## Reward Paths
-1.  **The Grinder:** rewarded with rare drops and raw materials.
-2.  **The Explorer:** rewarded with "Lost Tech" or "Ancient Artifacts" that provide unique bonuses or unlock new Smithing recipes.
+### Sinks:
+- **Healing:** The Town Hub NPC at (0,0) restores HP for a Mana Gem fee.
+- **Crafting:** Higher-tier gear costs gems to "finalize" the mana-forging.
+- **Abilities:** (Future) Buying specialized spell scrolls.
 
-## Tech Stack
-- **Engine:** Web-based (HTML5 Canvas + Vanilla JS).
-- **Goal:** Basic movement, town area, and interactive nodes (Tree, Ore).
+## The Magic System (Mana: 💠)
+Weapons now have a Mana cost to fire.
+
+### Resource Logic:
+- **Mana Bar:** A pool that regens over time. 
+- **The Trade-off:** High-damage weapons (Void Scepter) drain mana faster, requiring the player to wait or use "Mana-Carp" for recovery.
+
+## Biome Visuals
+- **Tiled Backgrounds:** Procedural patterns (Cracked earth, marsh, ruin-rubble) replace flat colors.
